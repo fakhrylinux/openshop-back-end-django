@@ -44,5 +44,7 @@ class ProductDetail(APIView):
 
     def delete(self, request, pk):
         product = self.get_object(pk)
-        product.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        product.is_delete = True
+        product.save()
+        serializer = ProductSerializer(product)
+        return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
