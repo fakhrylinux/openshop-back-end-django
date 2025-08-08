@@ -16,6 +16,12 @@ class ProductList(APIView):
 
     def get(self, request):
         products = Product.objects.all()
+        name = request.query_params.get("name")
+        location = request.query_params.get("location")
+        if name:
+            products = products.filter(name=name)
+        if location:
+            products = products.filter(location=location)
         serializer = ProductSerializer(products, many=True, context={'request': request})
         return Response({
             "products": serializer.data,
