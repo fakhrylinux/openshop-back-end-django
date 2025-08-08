@@ -8,7 +8,7 @@ from products.serializers import ProductSerializer
 
 class ProductList(APIView):
     def post(self, request):
-        product = ProductSerializer(data=request.data, context={'request': request})
+        product = ProductSerializer(data=request.data, context={"request": request})
         if product.is_valid():
             product.save()
             return Response(product.data, status=status.HTTP_201_CREATED)
@@ -22,10 +22,15 @@ class ProductList(APIView):
             products = products.filter(name=name)
         if location:
             products = products.filter(location=location)
-        serializer = ProductSerializer(products, many=True, context={'request': request})
-        return Response({
-            "products": serializer.data,
-        }, status=status.HTTP_200_OK)
+        serializer = ProductSerializer(
+            products, many=True, context={"request": request}
+        )
+        return Response(
+            {
+                "products": serializer.data,
+            },
+            status=status.HTTP_200_OK,
+        )
 
 
 class ProductDetail(APIView):
@@ -42,7 +47,9 @@ class ProductDetail(APIView):
 
     def put(self, request, pk):
         product = self.get_object(pk)
-        serializer = ProductSerializer(product, data=request.data, context={'request': request})
+        serializer = ProductSerializer(
+            product, data=request.data, context={"request": request}
+        )
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
